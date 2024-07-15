@@ -22,9 +22,11 @@
   margin: 0 auto;
   padding: 20px;
 }
+
 .create-quiz-wrapper .select {
   margin-top: 20px;
 }
+
 .create-quiz-wrapper .checkbox {
   margin-top: 30px;
   color: rgb(110, 108, 108);
@@ -38,6 +40,7 @@
   width: 300px !important;
   margin: 10px 0;
 }
+
 .create-quiz-wrapper .add-question,
 .add-answer {
   box-shadow: 2px 2px 4px 2px rgba(0, 0, 0, 0.2);
@@ -58,9 +61,11 @@
   color: white;
   border-radius: 10px !important;
 }
+
 .create-quiz-wrapper .btn-wrapper .btn:first-child {
   background-color: red;
 }
+
 .create-quiz-wrapper .question {
   display: flex;
   position: relative;
@@ -75,6 +80,7 @@
 .create-quiz-wrapper .question div {
   margin-right: 40px;
 }
+
 .create-quiz-wrapper .question .delete {
   position: absolute;
   right: 20px;
@@ -86,6 +92,30 @@
 }
 
 .create-quiz-wrapper .save-quiz {
+  background-color: green;
+  padding: 10px 20px;
+  margin: 20px 0;
+  cursor: pointer;
+  text-align: center;
+  display: inline-block;
+  font-size: 1em;
   border-radius: 10px;
   color: white;
+}
+
+.create-quiz-wrapper .btn {
+  background-color: #007bff; /* Button background color */
+  color: white; /* Text color */
+  padding: 10px 20px; /* Padding for the button */
+  border: none; /* Remove default border */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  text-align: center; /* Center text alignment */
+  display: inline-block; /* Inline-block display */
+  font-size: 1em; /* Font size */
+  margin: 10px 5px; /* Margin for spacing */
+}
+
+.create-quiz-wrapper .btn:hover {
+  background-color: #0056b3; /* Darker shade on hover */
 }

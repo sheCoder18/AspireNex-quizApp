@@ -31,27 +31,21 @@ export default class CreateQuiz extends React.Component {
     }
 
    selectPrivate = e => {
-       if(e.target.checked === true) {
-           this.setState({
-               mustBeSignedIn: e.target.checked,
-           });
-       } else {
-           this.setState({mustBeSignedIn: false});
-       }
+       this.setState({ mustBeSignedIn: e.target.checked });
    }
 
    addAnswer = () => {
        this.setState({
-           answers: this.state.answers.concat('')
-       })
+           answers: [...this.state.answers, '']
+       });
    }
 
    updateAnswer = (e, i) => {
-       let newArr = Object.assign([], this.state.answers);
+       let newArr = [...this.state.answers];
        newArr[i] = e.target.value;
        this.setState({
            answers: newArr
-       })
+       });
    }
 
    saveQuestion = () => {
@@ -59,9 +53,9 @@ export default class CreateQuiz extends React.Component {
            answers: this.state.answers,
            correctAnswer: this.state.correctAnswer,
            questionName: this.state.questionName
-       }
+       };
        this.setState({
-           questions: this.state.questions.concat(question),
+           questions: [...this.state.questions, question],
            addQuestion: false,
            questionName: '',
            answers: [],
@@ -72,7 +66,7 @@ export default class CreateQuiz extends React.Component {
    removeQuestion = (question) => {
        this.setState({
            questions: this.state.questions.filter(ques => ques.questionName !== question.questionName)
-       })
+       });
    }
 
    saveQuiz = () => {
@@ -82,22 +76,24 @@ export default class CreateQuiz extends React.Component {
            questions: this.state.questions,
            category: this.state.categoryVal,
            imgUrl: this.state.imgUrl
-       }
-       axios.post('/api/quizzes/create', {quiz, createdBy: localStorage.getItem('_ID')}).then(res => {
+       };
+       axios.post('/api/quizzes/create', { quiz, createdBy: localStorage.getItem('_ID') }, {
+           headers: { Authorization: `Bearer ${localStorage.getItem('JWT_PAYLOAD')}` }
+       }).then(res => {
             if (res.data.success) {
                 this.setState({
                     questions: [], 
                     answers: [],
-                    categoryVal: "Math",
+                    categoryVal: 'Math',
                     showToast: true
                 });
                 setTimeout(() => {
-                    this.setState({showToast: false});
+                    this.setState({ showToast: false });
                 }, 3000);
             }
-       }).catch(er => {
-           console.error(er);
-       })
+       }).catch(err => {
+           console.error(err);
+       });
    }
 
    render() {
@@ -111,11 +107,11 @@ export default class CreateQuiz extends React.Component {
                <div className="main">
                    <div className="header">Create Quiz</div>
                    <div className="form card">
-                       <input className="input" onChange={e => this.setState({name: e.target.value})} value={this.state.name} placeholder="Quiz Name" />
+                       <input className="input" onChange={e => this.setState({ name: e.target.value })} value={this.state.name} placeholder="Quiz Name" />
                        <br></br>
-                       <input className="input" onChange={e => this.setState({imgUrl: e.target.value})} value={this.state.imgUrl} placeholder="Img url" />
+                       <input className="input" onChange={e => this.setState({ imgUrl: e.target.value })} value={this.state.imgUrl} placeholder="Img url" />
                        <br></br>
-                       <select value={this.state.categoryVal} onChange={e => this.setState({categoryVal: e.target.value})} className="input select" placeholder="Category">
+                       <select value={this.state.categoryVal} onChange={e => this.setState({ categoryVal: e.target.value })} className="input select" placeholder="Category">
                            {this.state.categories.map((cat, idx) => (
                                <option key={idx} value={cat}>{cat}</option>
                            ))}
@@ -135,35 +131,31 @@ export default class CreateQuiz extends React.Component {
                        ))}
 
                        <div className="questions">
-                           <div className="add-question" onClick={() => this.setState({addQuestion: true})}>Add Question</div>
+                           <div className="add-question" onClick={() => this.setState({ addQuestion: true })}>Add Question</div>
                        </div>
-                       {console.log("working 1")};
-                       <span onClick={() => this.saveQuiz()} className="btn save-quiz">Save Quiz</span>
-                       {console.log("working 2")};
+                      
+                       <span onClick={this.saveQuiz} className="btn save-quiz">Save Quiz</span>
 
                        <Dialog model={this.state.addQuestion}>
                            <div className="new-question-form">
-                                   <input className="input" placeholder="Question" value={this.state.questionName} onChange={e => this.setState({questionName: e.target.value})} />
-                                   <div>Answers</div>
-                                   {this.state.answers.map((ans, idx) => (
-                                       <div className="answer-form" key={idx}>
-                                           <input type="radio" value={this.state.ans} onChange={e => this.setState({correctAnswer: ans})} name="answer"/> <input className="input" type="text" placeholder="Answer" value={this.state.answers[idx]} onChange={e => this.updateAnswer(e, idx)}/>
-                                       </div>   
-                                   ))}
-                                      {console.log("working 3")};
-                                   <div className="add-answer" onClick={this.addAnswer}>Add Answer</div>
-                                   {console.log("working 4")};
-                                   <div className="btn-wrapper">
-                                       <div className="btn" onClick={() => this.setState({addQuestion: false})}>Close</div>
-                                       {console.log("working 5")};
-                                       <div className="btn" onClick={this.saveQuestion}>Save</div>
-                                       {console.log("working 6")};
-                                   </div>
+                               <input className="input" placeholder="Question" value={this.state.questionName} onChange={e => this.setState({ questionName: e.target.value })} />
+                               <div>Answers</div>
+                               {this.state.answers.map((ans, idx) => (
+                                   <div className="answer-form" key={idx}>
+                                       <input type="radio" value={ans} onChange={e => this.setState({ correctAnswer: ans })} name="answer"/> 
+                                       <input className="input" type="text" placeholder="Answer" value={this.state.answers[idx]} onChange={e => this.updateAnswer(e, idx)}/>
+                                   </div>   
+                               ))}
+                               <div className="add-answer" onClick={this.addAnswer}>Add Answer</div>
+                               <div className="btn-wrapper">
+                                   <div className="btn" onClick={() => this.setState({ addQuestion: false })}>Close</div>
+                                   <div className="btn" onClick={this.saveQuestion}>Save</div>
+                               </div>
                            </div>
                        </Dialog>
                    </div>
                </div>
            </div>
-       )
+       );
    }
 }
